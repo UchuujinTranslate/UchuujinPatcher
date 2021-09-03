@@ -5,6 +5,8 @@ from git import Repo, RemoteProgress
 import os, stat
 
 # --------------------------- Delete old versions --------------------------- #
+# probably not necessary
+
 
 # needed for deleting read-only files in .git
 def on_rm_error(func, path, exc_info):
@@ -37,10 +39,9 @@ class CloneProgress(RemoteProgress):
     def close(self):
         self.pbar.close()
 
-git_url = "https://github.com/noneucat/uchuujin.git"
 repo_dir = "repos/"
 
-def CloneRepo(branch):
+def CloneRepo(git_url, branch):
     branch_dir = repo_dir + branch
     
     print(f"Cloning {branch} repo...")
@@ -52,14 +53,12 @@ def CloneRepo(branch):
     CloneProgress().close()
 
 
-
-
 # ----------------- Make separate versions for both branches ---------------- #
-# Clone both branches
-CloneRepo("master")
-CloneRepo("weblate")
+# Clone both repos
+CloneRepo("https://github.com/UchuujinTranslate/extraction-tools.git", "master")
+CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate")
 
-# Take src out of master
+# Take src from extraction-tools
 print("Copying src dir from master branch...")
 shutil.copytree("repos/master/src", "master_src")
 
