@@ -16,7 +16,7 @@ for filename in os.listdir(pack_dir):
     # requires modifying main repo's code
     print(f"Patching {filename}...")
     os.system(
-        f"py master_src/sc/sc_patch_translations.py \
+        f"py main_src/sc/sc_patch_translations.py \
          {pack_dir}{filename} \
          {scripts}{filename}.json \
          {scripts}en_US/{filename}.po")
