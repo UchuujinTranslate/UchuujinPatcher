@@ -22,8 +22,8 @@ os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/ICON0.PNG isofiles/ICO
 
 # Replace sc.cpk with patched version.
 print("Replacing sc.cpk")
-os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/USRDIR/DATA/sc.cpk isofiles/sc.cpk")
+os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/USRDIR/DATA/sc.cpk isofiles/new_sc.cpk")
 
 # Replace EBOOT.BIN with patched version.
 print("Replacing EBOOT.BIN")
-os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/SYSDIR/EBOOT.BIN isofiles/EBOOT.BIN")
+os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/SYSDIR/EBOOT.BIN isofiles/EBOOT_patched.BIN")

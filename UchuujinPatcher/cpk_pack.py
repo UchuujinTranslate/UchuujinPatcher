@@ -5,11 +5,11 @@
 import os
 from shutil import copyfile, rmtree
 
-pack_dir = "pack/"
+pack_dir = "pack_patched/"
 scripts = "weblate_scripts/"
 
 copyfile("bin/CriPakTools.exe", "isofiles/CriPakTools.exe")
-
+copyfile("isofiles/sc.cpk", "isofiles/new_sc.cpk")
 
 # Must execute in same dir as well
 cwd = os.getcwd()
@@ -18,12 +18,9 @@ os.chdir("isofiles/")
 
 
 for filename in os.listdir(pack_dir):
-    # Call as python command right now, but later on,
-    # import as a module for better flexibility and speed,
-    # requires modifying main repo's code
     print(f"Packing {filename}...")
-    os.system(f"CriPakTools.exe sc.cpk {filename} pack/{filename} new_sc.cpk")
-
+    os.system(f"CriPakTools.exe new_sc.cpk {filename} {pack_dir}{filename}")
+    
 # Delete tool
 os.remove("CriPakTools.exe")
 
