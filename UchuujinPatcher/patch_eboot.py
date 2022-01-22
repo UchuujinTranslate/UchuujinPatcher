@@ -9,5 +9,6 @@ import bsdiff4
 
 bsdiff4.file_patch("isofiles/EBOOT.BIN", 
                    "isofiles/EBOOT_patched.BIN",
-                   "repos/main/EBOOT.BIN.patch" 
+                   #"repos/main/EBOOT.BIN.patch" 
+                   "repos/main/EBOOT_test_vwf.BIN.patch"
                    )
