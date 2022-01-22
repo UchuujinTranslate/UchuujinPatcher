@@ -20,5 +20,6 @@ iso.get_file_from_iso(
     "isofiles/sc.cpk", iso_path='/PSP_GAME/USRDIR/DATA/sc.cpk')
 iso.get_file_from_iso(
     "isofiles/EBOOT.BIN", iso_path='/PSP_GAME/SYSDIR/EBOOT.BIN')
-
+iso.get_file_from_iso(
+    "isofiles/lt.bin", iso_path='/PSP_GAME/SYSDIR/lt.bin')
 iso.close()
