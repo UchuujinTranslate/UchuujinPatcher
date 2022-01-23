@@ -21,10 +21,13 @@
 
 # Jank way to run all the scripts currently
 import os
+
 os.system("py UchuujinPatcher/clone_repo.py")
 os.system("py UchuujinPatcher/decompress_iso.py")
 os.system("py UchuujinPatcher/cpk_dump.py")
 os.system("py UchuujinPatcher/patch_eboot.py")
+os.system("py UchuujinPatcher/patch_lt.py")
+os.system("py UchuujinPatcher/adjust_width_font.py")
 os.system("py UchuujinPatcher/patch_sc.py")
 os.system("py UchuujinPatcher/cpk_pack.py")
 os.system("py UchuujinPatcher/replace_iso.py")
