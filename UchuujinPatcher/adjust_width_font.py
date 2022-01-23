@@ -1,5 +1,5 @@
 import struct
-font  = open("isofiles/lt.bin","r+b")
+font  = open("isofiles/lt_patched.bin","r+b")
 dic = {
 0:  4,#space
 1:  5,
