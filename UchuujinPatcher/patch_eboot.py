@@ -1,13 +1,9 @@
-# https://pypi.org/project/bsdiff4/
+import os
 
-# Use bsdiff and eboot patch in main repo
+#decrypt eboot
+os.system("bin\\deceboot.exe isofiles/EBOOT.BIN isofiles/EBOOT_DEC.BIN")
 
-# Needs wheel and VC++ 2015 v140 toolset (choco install vcbuildtools)
-# on Windows, look into Linux / Docker
 
-import bsdiff4
 
-bsdiff4.file_patch("isofiles/EBOOT.BIN", 
-                   "isofiles/EBOOT_patched.BIN",
-                   "repos/main/EBOOT.BIN.patch" 
-                   )
+#insert vwf function
+os.system("bin\\armips.exe repos/main/EBOOT.asm")
