@@ -57,7 +57,7 @@ def CloneRepo(git_url, branch):
 # Clone both repos
 CloneRepo("https://github.com/UchuujinTranslate/extraction-tools.git", "main")
 #CloneRepo("https://github.com/gil-unx/extraction-tools.git", "main")
-ConeRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate")
+CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate")
 #CloneRepo("https://github.com/gil-unx/uchuujin.git", "weblate")
 
 # Take src from extraction-tools
