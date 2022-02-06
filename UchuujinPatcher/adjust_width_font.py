@@ -1,7 +1,6 @@
 import struct
 font  = open("isofiles/lt_patched.bin","r+b")
 dic = {
-dic = {
 0x0000:4,#space
 0x0001:5,#、
 0x0002:4,#。
