@@ -5,7 +5,12 @@
 /repos
 /weblate_scripts
 /master_src
-*.txt
+notes.txt
+main_src/
+work/
+output/
+*.lnk
+*.xdelta
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -147,7 +152,3 @@ dmypy.json
 cython_debug/
 
 
-main_src/
-work/
-output/
-*.lnk
