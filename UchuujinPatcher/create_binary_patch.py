@@ -5,6 +5,7 @@
 from datetime import date
 import hashlib
 import os
+import shutil
 
 
 
@@ -32,34 +33,50 @@ def makeMD5(filename):
     return md5Hash
 
 def create_binary_patch():    
-    
-    #os.mkdir("output/to_zip")
-    
-
     originalIso = "2668 - Nichijou - Uchuujin (Japan) (v1.01).iso"
-
     patchedIso = "output/NichiPatched.iso"
-
-    today = date.today()
-
+    
+    os.mkdir("output/to_zip")
+    
     # Label with latest translation commit or date?
     # Date for now
-    patchFile = f"UchuujinEng_{date.isoformat(today)}.patch"
+    today = date.today()
+    patchTitle = f"UchuujinEng_{date.isoformat(today)}"
+    patchFile = f"output/to_zip/{patchTitle}.xdelta"
+
+    # Create xdelta patch
+    print("Creating patch file...")
+    os.system(f"bin\\xdelta3.exe -e -s \"{originalIso}\" {patchedIso} {patchFile}")
+    
+    
+    # create md5 file
     print("Generating MD5 Hashes...")
+    
     originalMD5 = makeMD5(originalIso)
     print("Original ISO MD5: " + originalMD5)
+    
     patchedMD5 = makeMD5(patchedIso)
     print("Patched ISO MD5: " + patchedMD5)
-    #patchFileMD5 = makeMD5(patchFile)
-    #print("Patch File MD5: " + patchFileMD5)
-    patchFileMD5 = "placeholder"
+    
+    patchFileMD5 = makeMD5(patchFile)
+    print("Patch File MD5: " + patchFileMD5)
 
     # Create text file
     # Make into yml or similar file for player-end patch tool to use?
-    with open('output/md5_hashes.txt', 'w') as f:
+    with open('output/to_zip/md5_hashes.txt', 'w') as f:
         f.write("MD5 of original ISO used: \n" + originalMD5 + "\n\n")
         f.write("MD5 of patched ISO generated: \n" + patchedMD5 + "\n\n")
         f.write("MD5 of patch file: \n" + patchFileMD5 + "\n")
+
+    # copy other files to to_zip folder
+    shutil.copyfile("bin/DeltaPatcherLite.exe",
+                    "output/to_zip/DeltaPatcherLite.exe")
+    shutil.copyfile("UchuujinPatcher/DISTRIB_README.txt", "output/to_zip/README.txt")
+    
+
+    # create zip file
+    print("Making .zip archive...")
+    shutil.make_archive(f"output/{patchTitle}", 'zip', "output/to_zip")
 
 
 if __name__ == "__main__":
