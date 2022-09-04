@@ -1,6 +1,6 @@
 .PSP
 
-.open "isofiles/EBOOT_DEC.BIN","isofiles/EBOOT_patched.BIN",0x8804000 -0xc0
+.open "work/isofiles/EBOOT_DEC.BIN","work/isofiles/EBOOT_patched.BIN",0x8804000 -0xc0
 
 //textbox line limit char
 .org 0x8804d28

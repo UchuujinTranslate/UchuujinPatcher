@@ -10,12 +10,12 @@ def cpk_pack():
     pack_dir = "pack_patched/"
     scripts = "weblate_scripts/"
 
-    copyfile("bin/CriPakTools.exe", "isofiles/CriPakTools.exe")
-    copyfile("isofiles/sc.cpk", "isofiles/new_sc.cpk")
+    copyfile("bin/CriPakTools.exe", "work/isofiles/CriPakTools.exe")
+    copyfile("work/isofiles/sc.cpk", "work/isofiles/new_sc.cpk")
 
     # Must execute in same dir as well
     cwd = os.getcwd()
-    os.chdir("isofiles/")
+    os.chdir("work/isofiles/")
 
 
 

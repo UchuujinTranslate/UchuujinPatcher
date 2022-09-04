@@ -20,7 +20,7 @@ class CloneProgress(RemoteProgress):
     def close(self):
         self.pbar.close()
 
-repo_dir = "repos/"
+repo_dir = "work/repos/"
 
 def CloneRepo(git_url, branch):
     branch_dir = repo_dir + branch
@@ -48,7 +48,7 @@ def clone_repos():
 
     # Take scripts out of weblate
     print("Copying scripts dir from weblate branch...")
-    shutil.copytree("repos/weblate/scripts", "weblate_scripts")
+    shutil.copytree("work/repos/weblate/scripts", "work/weblate_scripts")
 
 
     print("Done!")

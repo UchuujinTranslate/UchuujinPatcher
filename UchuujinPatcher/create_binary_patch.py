@@ -4,6 +4,7 @@
 
 from datetime import date
 import hashlib
+import os
 
 
 
@@ -30,10 +31,14 @@ def makeMD5(filename):
     md5Hash = md5_object.hexdigest()
     return md5Hash
 
-def create_binary_patch():
+def create_binary_patch():    
+    
+    #os.mkdir("output/to_zip")
+    
+
     originalIso = "2668 - Nichijou - Uchuujin (Japan) (v1.01).iso"
 
-    patchedIso = "NichiPatched.iso"
+    patchedIso = "output/NichiPatched.iso"
 
     today = date.today()
 
@@ -51,7 +56,7 @@ def create_binary_patch():
 
     # Create text file
     # Make into yml or similar file for player-end patch tool to use?
-    with open('md5_hashes.txt', 'w') as f:
+    with open('output/md5_hashes.txt', 'w') as f:
         f.write("MD5 of original ISO used: \n" + originalMD5 + "\n\n")
         f.write("MD5 of patched ISO generated: \n" + patchedMD5 + "\n\n")
         f.write("MD5 of patch file: \n" + patchFileMD5 + "\n")

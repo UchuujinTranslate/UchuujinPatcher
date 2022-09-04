@@ -1,7 +1,7 @@
 import struct
 
 def adjust_width_font():
-    font  = open("isofiles/lt_patched.bin","r+b")
+    font = open("work/isofiles/lt_patched.bin", "r+b")
     dic = {
     0x0000:4,#space
     0x0001:5,#、

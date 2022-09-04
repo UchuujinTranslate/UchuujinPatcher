@@ -10,17 +10,17 @@ import shutil
 import struct
 
 def patch_sc():
-    pack_dir = "isofiles/pack/"
-    scripts = "repos/weblate/scripts/"
-    patched_dir = "isofiles/pack_patched/"
-    scripts_tmp = "repos/weblate/scripts/temp/"
+    pack_dir = "work/isofiles/pack/"
+    scripts = "work/repos/weblate/scripts/"
+    patched_dir = "work/isofiles/pack_patched/"
+    scripts_tmp = "work/repos/weblate/scripts/temp/"
     try:
         os.mkdir(patched_dir)
     except FileExistsError:
         print("Dir already exists")
 
     #calculate new pointer sc.cpk
-    eboot = open("isofiles/EBOOT_patched.BIN","r+b")
+    eboot = open("work/isofiles/EBOOT_patched.BIN", "r+b")
     newScOffset = 0
     ptrOff = 0x147044
     eboot.seek(ptrOff,0)

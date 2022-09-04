@@ -2,10 +2,15 @@ import os
 
 
 def patch_eboot():
+    print("patch_eboot.py")
+    
     #decrypt eboot
-    os.system("bin\\deceboot.exe isofiles/EBOOT.BIN isofiles/EBOOT_DEC.BIN")
+    print("Decrypting eboot...")
+    os.system(
+        "bin\\deceboot.exe work/isofiles/EBOOT.BIN work/isofiles/EBOOT_DEC.BIN")
 
     #insert vwf function
+    print("Inserting vwf function...")
     os.system("bin\\armips.exe UchuujinPatcher/eboot/EBOOT.asm")
 
 
