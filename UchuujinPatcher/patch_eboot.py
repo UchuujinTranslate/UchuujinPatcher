@@ -1,9 +1,13 @@
 import os
 
-#decrypt eboot
-os.system("bin\\deceboot.exe isofiles/EBOOT.BIN isofiles/EBOOT_DEC.BIN")
+
+def patch_eboot():
+    #decrypt eboot
+    os.system("bin\\deceboot.exe isofiles/EBOOT.BIN isofiles/EBOOT_DEC.BIN")
+
+    #insert vwf function
+    os.system("bin\\armips.exe repos/main/EBOOT.asm")
 
 
-
-#insert vwf function
-os.system("bin\\armips.exe repos/main/EBOOT.asm")
+if __name__ == "__main__":
+    patch_eboot()

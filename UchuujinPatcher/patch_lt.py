@@ -7,7 +7,12 @@
 
 import bsdiff4
 
-bsdiff4.file_patch("isofiles/lt.bin",
-                   "isofiles/lt_patched.bin",
-                   "repos/main/lt.bin.patch"
-                   )
+def patch_lt():
+    bsdiff4.file_patch("isofiles/lt.bin",
+                    "isofiles/lt_patched.bin",
+                    "repos/main/lt.bin.patch"
+                    )
+
+
+if __name__ == "__main__":
+    patch_lt()
