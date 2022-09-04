@@ -149,4 +149,5 @@ cython_debug/
 
 main_src/
 work/
+output/
 *.lnk
