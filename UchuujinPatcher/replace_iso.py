@@ -18,7 +18,7 @@ def replace_iso():
 
     # Possible english translation icon replacement?
     print("Replacing ICON0.PNG")
-    os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/ICON0.PNG isofiles/ICON0.PNG")
+    os.system("bin\\UMD-replace.exe NichiPatched.iso PSP_GAME/ICON0.PNG UchuujinPatcher/NEW_ICON0.PNG")
 
     # Replace sc.cpk with patched version.
     print("Replacing sc.cpk")

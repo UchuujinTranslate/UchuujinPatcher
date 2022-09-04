@@ -30,7 +30,7 @@ def patch_sc():
         # requires modifying / integrating extraction tool code
         print(f"Patching {filename}...")
         os.system(
-            f"py main_src/sc/sc_patch_translations_tmp.py \
+            f"py UchuujinPatcher/sc/sc_patch_translations_tmp.py \
             {pack_dir}{filename} \
             {scripts_tmp}{filename}.json \
             {scripts}en_US/{filename}.po\

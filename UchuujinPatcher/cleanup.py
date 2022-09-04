@@ -15,11 +15,29 @@ def on_rm_error(func, path, exc_info):
 
 
 def del_last_ver():
+    # more graceful way of doing this than try for each line?
     try:
         shutil.rmtree("repos", onerror=on_rm_error)
+    except FileNotFoundError:
+        print("Dir already deleted.")
+        
+    try:
         shutil.rmtree("weblate_scripts")
+    except FileNotFoundError:
+        print("Dir already deleted.")
+        
+    try:
         shutil.rmtree("main_src")
+    except FileNotFoundError:
+        print("Dir already deleted.")
+        
+    try:
         shutil.rmtree("isofiles")
+    except FileNotFoundError:
+        print("Dir already deleted.")
+        
+    try:
+        os.remove("NichiPatched.iso")
     except FileNotFoundError:
         print("Dirs already deleted.")
 

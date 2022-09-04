@@ -10,7 +10,7 @@ import bsdiff4
 def patch_lt():
     bsdiff4.file_patch("isofiles/lt.bin",
                     "isofiles/lt_patched.bin",
-                    "repos/main/lt.bin.patch"
+                    "UchuujinPatcher/lt/lt.bin.patch"
                     )
 
 
