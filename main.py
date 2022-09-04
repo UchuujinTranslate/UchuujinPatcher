@@ -19,8 +19,10 @@
 # create_binary_patch
 # distrib
 
+import UchuujinPatcher.cleanup
+UchuujinPatcher.cleanup.del_last_ver()
+
 import UchuujinPatcher.clone_repo
-UchuujinPatcher.clone_repo.del_old_vers()
 UchuujinPatcher.clone_repo.clone_repos()
 
 import UchuujinPatcher.decompress_iso
@@ -30,22 +32,22 @@ import UchuujinPatcher.cpk_dump
 UchuujinPatcher.cpk_dump.cpk_dump()
 
 import UchuujinPatcher.patch_eboot
-UchuujinPatcher.patch_eboot()
+UchuujinPatcher.patch_eboot.patch_eboot()
 
 import UchuujinPatcher.patch_lt
-UchuujinPatcher.patch_lt()
+UchuujinPatcher.patch_lt.patch_lt()
 
 import UchuujinPatcher.patch_sc
-UchuujinPatcher.patch_sc()
+UchuujinPatcher.patch_sc.patch_sc()
 
 import UchuujinPatcher.cpk_pack
-UchuujinPatcher.cpk_pack()
+UchuujinPatcher.cpk_pack.cpk_pack()
 
 import UchuujinPatcher.replace_iso
-UchuujinPatcher.replace_iso()
+UchuujinPatcher.replace_iso.replace_iso()
 
 import UchuujinPatcher.create_binary_patch
-UchuujinPatcher.create_binary_patch()
+UchuujinPatcher.create_binary_patch.create_binary_patch()
 
 
 
