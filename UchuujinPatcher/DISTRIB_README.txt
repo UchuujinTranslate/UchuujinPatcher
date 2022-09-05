@@ -16,3 +16,8 @@ https://www.romhacking.net/patch/
 Alternate link: https://www.marcrobledo.com/RomPatcher.js/
 
 Works in your browser on any operating system.
+
+
+-------
+DeltaPatcher / DeltaPatcherLite is distibuted under the GPLv2 license.
+From: https://www.romhacking.net/utilities/704/

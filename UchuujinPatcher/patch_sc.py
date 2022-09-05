@@ -8,6 +8,7 @@
 import os
 import shutil
 import struct
+from UchuujinPatcher.sc.sc_patch_translations_tmp import patch_translations
 
 def patch_sc():
     pack_dir = "work/isofiles/pack/"
@@ -29,13 +30,20 @@ def patch_sc():
         # import as a module for better flexibility and speed, 
         # requires modifying / integrating extraction tool code
         print(f"Patching {filename}...")
-        os.system(
-            f"py UchuujinPatcher/sc/sc_patch_translations_tmp.py \
-            {pack_dir}{filename} \
-            {scripts_tmp}{filename}.json \
-            {scripts}en_US/{filename}.po\
-            {patched_dir}\
-            {scripts}{filename}.json")
+        patch_translations(pack_dir + filename,
+                           scripts_tmp + filename + ".json",
+                           scripts + "en_US/" + filename + ".po", 
+                           patched_dir,
+                           scripts + filename + ".json"
+                           )
+        
+        # os.system(
+        #     f"py UchuujinPatcher/sc/sc_patch_translations_tmp.py \
+        #     {pack_dir}{filename} \
+        #     {scripts_tmp}{filename}.json \
+        #     {scripts}en_US/{filename}.po\
+        #     {patched_dir}\
+        #     {scripts}{filename}.json")
         newScSize =os.path.getsize(patched_dir+filename)#get new sc size
         eboot.write(struct.pack("<HH",newScOffset>>11,newScSize>>11))
         newScOffset+=newScSize
