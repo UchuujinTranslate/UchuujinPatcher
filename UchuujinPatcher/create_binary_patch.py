@@ -41,7 +41,7 @@ def create_binary_patch():
     # Label with latest translation commit or date?
     # Date for now
     today = date.today()
-    patchTitle = f"UchuujinEng_{date.isoformat(today)}"
+    patchTitle = f"UchuujinEng_{date.isoformat(today)}_ALPHA"
     patchFile = f"output/to_zip/{patchTitle}.xdelta"
 
     # Create xdelta patch
