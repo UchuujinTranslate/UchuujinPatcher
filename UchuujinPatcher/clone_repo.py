@@ -38,6 +38,7 @@ def CloneRepo(git_url, branch):
 def clone_repos():
     # Clone repo
     CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate")
+    CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "master")
 
 
     # Take scripts out of weblate

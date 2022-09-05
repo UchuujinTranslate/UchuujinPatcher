@@ -11,23 +11,23 @@ from shutil import copyfile, rmtree
 # except FileNotFoundError:
 #     print("Dirs already deleted.")
 
-def cpk_dump():
-    # Make dir
-    os.mkdir("work/isofiles/sc")
 
+def union_dump():
+    # Make dir
+    os.mkdir("work/isofiles/union")
 
     # Copy CPT and sc.cpk into same directory so ALL arg doesn't get put in root dir
-    copyfile("bin/CriPakTools.exe", "work/isofiles/sc/CriPakTools.exe")
-    copyfile("work/isofiles/sc.cpk", "work/isofiles/sc/sc.cpk")
+    copyfile("bin/CriPakTools.exe", "work/isofiles/union/CriPakTools.exe")
+    copyfile("work/isofiles/union.cpk", "work/isofiles/union/union.cpk")
 
     # Must execute in same dir as well
     cwd = os.getcwd()
-    os.chdir("work/isofiles/sc")
-    os.system("CriPakTools.exe sc.cpk ALL")
+    os.chdir("work/isofiles/union")
+    os.system("CriPakTools.exe union.cpk ALL")
 
     # Delete tools
     os.remove("CriPakTools.exe")
-    os.remove("sc.cpk")
+    os.remove("union.cpk")
 
     # Go back to root dir
     # print(cwd)
@@ -35,4 +35,4 @@ def cpk_dump():
 
 
 if __name__ == "__main__":
-    cpk_dump()
+    union_dump()

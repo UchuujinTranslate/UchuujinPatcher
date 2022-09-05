@@ -6,8 +6,8 @@ import os
 from shutil import copyfile, rmtree
 
 
-def cpk_pack():
-    pack_dir = "pack_patched/"
+def cpk_pack_sc():
+    sc_dir = "sc_patched/"
     scripts = "weblate_scripts/"
 
     copyfile("bin/CriPakTools.exe", "work/isofiles/CriPakTools.exe")
@@ -19,9 +19,9 @@ def cpk_pack():
 
 
 
-    for filename in os.listdir(pack_dir):
+    for filename in os.listdir(sc_dir):
         print(f"Packing {filename}...")
-        os.system(f"CriPakTools.exe new_sc.cpk {filename} {pack_dir}{filename}")
+        os.system(f"CriPakTools.exe new_sc.cpk {filename} {sc_dir}{filename}")
         
     # Delete tool
     os.remove("CriPakTools.exe")
@@ -32,4 +32,4 @@ def cpk_pack():
 
 
 if __name__ == "__main__":
-    cpk_pack()
+    cpk_pack_sc()

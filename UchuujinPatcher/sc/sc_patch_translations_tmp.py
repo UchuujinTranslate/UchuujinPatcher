@@ -33,6 +33,7 @@ def patch_translations(sc_file, meta, po, patched_dir, meta2):
     "}":0x0030,
     "+":0x003B,
     "–":0x003c,
+    "－": 0x003c,
     "—":0x003C,
     "-":0x003C,
     "=":0x0040,

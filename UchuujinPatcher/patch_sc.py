@@ -11,9 +11,9 @@ import struct
 from UchuujinPatcher.sc.sc_patch_translations_tmp import patch_translations
 
 def patch_sc():
-    pack_dir = "work/isofiles/pack/"
+    sc_dir = "work/isofiles/sc/"
     scripts = "work/repos/weblate/scripts/"
-    patched_dir = "work/isofiles/pack_patched/"
+    patched_dir = "work/isofiles/sc_patched/"
     scripts_tmp = "work/repos/weblate/scripts/temp/"
     try:
         os.mkdir(patched_dir)
@@ -25,12 +25,12 @@ def patch_sc():
     newScOffset = 0
     ptrOff = 0x147044
     eboot.seek(ptrOff,0)
-    for filename in os.listdir(pack_dir):
+    for filename in os.listdir(sc_dir):
         # Call as python command right now, but later on, 
         # import as a module for better flexibility and speed, 
         # requires modifying / integrating extraction tool code
         print(f"Patching {filename}...")
-        patch_translations(pack_dir + filename,
+        patch_translations(sc_dir + filename,
                            scripts_tmp + filename + ".json",
                            scripts + "en_US/" + filename + ".po", 
                            patched_dir,

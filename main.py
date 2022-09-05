@@ -30,6 +30,9 @@ UchuujinPatcher.decompress_iso.decompress_iso()
 
 import UchuujinPatcher.cpk_dump
 UchuujinPatcher.cpk_dump.cpk_dump()
+    
+# import UchuujinPatcher.union_dump
+# UchuujinPatcher.union_dump.union_dump()
 
 import UchuujinPatcher.patch_eboot
 UchuujinPatcher.patch_eboot.patch_eboot()
@@ -37,11 +40,14 @@ UchuujinPatcher.patch_eboot.patch_eboot()
 import UchuujinPatcher.patch_lt
 UchuujinPatcher.patch_lt.patch_lt()
 
+import UchuujinPatcher.adjust_width_font
+UchuujinPatcher.adjust_width_font.adjust_width_font()
+
 import UchuujinPatcher.patch_sc
 UchuujinPatcher.patch_sc.patch_sc()
 
 import UchuujinPatcher.cpk_pack
-UchuujinPatcher.cpk_pack.cpk_pack()
+UchuujinPatcher.cpk_pack.cpk_pack_sc()
 
 import UchuujinPatcher.replace_iso
 UchuujinPatcher.replace_iso.replace_iso()

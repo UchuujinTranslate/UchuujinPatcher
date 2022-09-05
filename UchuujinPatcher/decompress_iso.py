@@ -43,6 +43,8 @@ def decompress_iso():
     print("Extracting lt.bin")
     iso.get_file_from_iso(
         "work/isofiles/lt.bin", iso_path='/PSP_GAME/USRDIR/DATA/lt.bin')
+    iso.get_file_from_iso(
+        "work/isofiles/union.cpk", iso_path='/PSP_GAME/USRDIR/DATA/union.cpk')
     iso.close()
 
 
