@@ -48,3 +48,5 @@ UchuujinPatcher.replace_iso.replace_iso()
 
 import UchuujinPatcher.create_binary_patch
 UchuujinPatcher.create_binary_patch.create_binary_patch()
+
+print("All done!")

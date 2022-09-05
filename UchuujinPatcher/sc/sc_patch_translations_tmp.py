@@ -117,22 +117,22 @@ table.update(gtbl)
 
 def encode(asc):
     ret = b""
-    lenght = len(asc)
+    length = len(asc)
     asc += "[{FFFF}]"
     i = 0
-    while i < lenght:
+    while i < length:
         c = asc[i]
         if asc[i] == "[" and asc[i + 1] == "{" and asc[i + 6] == "}" and asc[i + 7] == "]":
             ret += struct.pack("<H", int(asc[i + 2:i + 6], 16))
             i += 8
-        elif asc[i] == "\n":
+        elif asc[i] == "\n":    # newline
             ret += struct.pack("<H", 0xfffe)
             i+=1
         elif asc[i] == "\\" and  asc[i+1] == "n":
             ret += struct.pack("<H", 0xfffe)
             i+=2
         elif  asc[i] == "." and asc[i+1] == "." and asc[i+2] == ".":
-            ret += struct.pack("<H", 0x23)#to elipsis
+            ret += struct.pack("<H", 0x23) # 3 periods to elipsis
             i+=3
         elif asc[i] == "!" and asc[i+1] == "!":
             ret += struct.pack("<H", 0x017f)
@@ -149,7 +149,7 @@ def encode(asc):
         else:
             print("uncaught chr "+c)
             print("skip chr")
-            input("pres any key")
+            input("press any key")
             i+=1
 
     return ret,len(ret)
