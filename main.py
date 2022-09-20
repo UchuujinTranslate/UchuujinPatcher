@@ -34,6 +34,9 @@ UchuujinPatcher.cpk_dump.cpk_dump()
 import UchuujinPatcher.union_dump
 UchuujinPatcher.union_dump.union_dump()
 
+import UchuujinPatcher.union.union_cgs_extract
+UchuujinPatcher.union.union_cgs_extract.cgs_extract()
+
 import UchuujinPatcher.patch_eboot
 UchuujinPatcher.patch_eboot.patch_eboot()
 
