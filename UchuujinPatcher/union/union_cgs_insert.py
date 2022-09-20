@@ -936,6 +936,39 @@ group3_sizes = {2890:0x0A,
 3033:0x02,
 3034:0x01,
 3035:0x01,}
+
+def calc_checksum(f):
+    s = f.tell()
+    f.seek(0)
+    p1 = 0x11111111
+    p2 = 0x11111111
+    p3 = 0x11111111
+    p4 = 0x11111111
+    m = 0xffffffff
+    s -= 16
+    while s > 0:
+        a1 = int.from_bytes(f.read(4), byteorder='little')
+        a2 = int.from_bytes(f.read(4), byteorder='little')
+        a3 = int.from_bytes(f.read(4), byteorder='little')
+        a4 = int.from_bytes(f.read(4), byteorder='little')
+        p1 += a1
+        p1 = p1 & m
+        if p1 < a1:
+            p2 += 1 + a2
+        else:
+            p2 += 0 + a2
+        p2 = p2 & m
+        p3 += a3
+        p3 = p3 & m
+        if p3 < a3:
+            p4 += 1 + a4
+        else:
+            p4 += 0 + a4
+        p4 = p4 & m
+        s -= 16
+    # print("%x %x %x %x" % (p1, p2, p3, p4))
+    return struct.pack("<IIII", p1, p2, p3, p4)
+
 def make_pixel(chunk,ref,dsizes,binary):
     ret = io.BytesIO()
     ret.write(struct.pack("I",chunk))
@@ -956,36 +989,7 @@ def make_pixel(chunk,ref,dsizes,binary):
     align = (0x800 - (ret.tell() % 0x800))
     if align:
         ret.write(b"\x00" * align )
-    s = ret.tell()
-    ret.seek(0)
-    p1 = 0x11111111
-    p2 = 0x11111111
-    p3 = 0x11111111
-    p4 = 0x11111111
-    m = 0xffffffff
-    s -= 16
-    while s > 0:
-        a1 = int.from_bytes(ret.read(4), byteorder='little')
-        a2 = int.from_bytes(ret.read(4), byteorder='little')
-        a3 = int.from_bytes(ret.read(4), byteorder='little')
-        a4 = int.from_bytes(ret.read(4), byteorder='little')
-        p1 += a1
-        p1 = p1 & m
-        if p1 < a1:
-            p2 += 1 + a2
-        else:
-            p2 += 0 + a2
-        p2 = p2 & m
-        p3 += a3
-        p3 = p3 & m
-        if p3 < a3:
-            p4 += 1 + a4
-        else:
-            p4 += 0 + a4
-        p4 = p4 & m
-        s -= 16
-    #print("%x %x %x %x" % (p1, p2, p3, p4))
-    checksum = struct.pack("<IIII", p1, p2, p3, p4)
+    checksum = calc_checksum(ret)
     ret.seek(-16, 2)
     ret.write(checksum)
     ret.seek(0)
@@ -999,7 +1003,7 @@ def cgs_insert():
         info = json.loads(open(js, "rb").read())
         union_index = int(os.path.basename(js[:-5]))
         pixel_index = 1
-        out = open("work/isofiles/union_patched/{0}".format(union_index), 'wb')
+        out = open("work/isofiles/union_patched/{0}".format(union_index), 'w+b')
         update_pointer = False
         update_pallete = []
         update_pixel = []
@@ -1049,9 +1053,10 @@ def cgs_insert():
             for upixel in update_pixel:
                 eboot.write(struct.pack("I", out.tell()))
                 out.write(upixel)
-                align = 0x1000-(0x1000 - (out.tell() % 0x1000))
-                if align:
-                    out.write(b"\x00" * align)
+                out.write(b"\x00" * (0x1000 - (out.tell() % 0x1000)))
+            checksum = calc_checksum(out)
+            out.seek(-16, 2)
+            out.write(checksum)
         out.close()
         if union_index in group1_sizes:
             new_union_size = os.path.getsize("work/isofiles/union_patched/{0}".format(union_index))
