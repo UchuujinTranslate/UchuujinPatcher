@@ -12,7 +12,8 @@ from PIL import Image
 from os.path import basename, splitext
 
 def insert_png(png):
-    png = Image.open(png)
+    print(png)
+    png_img = Image.open(png)
     png_name = splitext(png)[0]
 
     chunk = png_name.split("_")[0]
@@ -30,7 +31,7 @@ def insert_png(png):
 
     # read png into chunks
 
-    img = png.convert('RGBA')
+    img = png_img.convert('RGBA')
     arr = []
 
     for yi in range(0, meta[png_name]["image_height"]):
@@ -143,3 +144,7 @@ def insert_png(png):
     chunk_raw = chunk_raw[:len(chunk_raw) - 16] + checksum
 
     open(chunk, 'wb+').write(chunk_raw)
+
+
+if __name__ == "__main__":
+    insert_png(sys.argv[1])

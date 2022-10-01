@@ -19,12 +19,17 @@
 # create_binary_patch
 # distrib
 
+import time
+start_time = time.time()
+
+# preparing
 import UchuujinPatcher.cleanup
 UchuujinPatcher.cleanup.del_last_ver()
 
 import UchuujinPatcher.clone_repo
 UchuujinPatcher.clone_repo.clone_repos()
 
+# extracting iso files
 import UchuujinPatcher.decompress_iso
 UchuujinPatcher.decompress_iso.decompress_iso()
 
@@ -37,6 +42,7 @@ UchuujinPatcher.union_dump.union_dump()
 import UchuujinPatcher.union.union_cgs_extract
 UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
+# patching cpk files
 import UchuujinPatcher.patch_eboot
 UchuujinPatcher.patch_eboot.patch_eboot()
 
@@ -58,6 +64,7 @@ UchuujinPatcher.union.union_cgs_insert.cgs_insert()
 import UchuujinPatcher.union_pack
 UchuujinPatcher.union_pack.cpk_pack_union()
 
+# inserting iso files
 import UchuujinPatcher.replace_iso
 UchuujinPatcher.replace_iso.replace_iso()
 
@@ -65,3 +72,6 @@ import UchuujinPatcher.create_binary_patch
 UchuujinPatcher.create_binary_patch.create_binary_patch()
 
 print("All done!")
+
+elapsed_time = time.time() - start_time
+print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
