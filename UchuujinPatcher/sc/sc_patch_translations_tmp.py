@@ -6,6 +6,7 @@ from os.path import basename
 import polib
 
 def patch_translations(sc_file, meta, po, patched_dir, meta2):
+    print(f'Patching sc file: {sc_file}')
     sc = open(sc_file, 'rb')
     sc_name = basename(sc_file)
     meta = json.load(open(meta, 'r', encoding='utf-8'))
@@ -175,6 +176,8 @@ def patch_translations(sc_file, meta, po, patched_dir, meta2):
     newBuff.write(bytes(meta["ptr2"]["size"]))
     newBuff.write(binascii.unhexlify(meta["ptr2"]["ctrl_code"].encode("ASCII")))
     newOffset = newBuff.tell()
+    
+    debugMessages = False
 
     #update speaker & text from *.po
     for i in range(0, len(meta2)):
@@ -197,13 +200,15 @@ def patch_translations(sc_file, meta, po, patched_dir, meta2):
 
                 if entry.msgid == dialog["speaker"]:
                     speakerTranslation = entry.msgstr
-                    print("speakerMatch: %s -> %s\n" %
-                        (entry.msgid.rstrip(), speakerTranslation.rstrip()))
+                    if debugMessages:
+                        print("speakerMatch: %s -> %s\n" %
+                            (entry.msgid.rstrip(), speakerTranslation.rstrip()))
 
                 if entry.msgid == dialog["text"]:
                     textTranslation = entry.msgstr
-                    print("textMatch: %s -> %s\n" %
-                        (entry.msgid.rstrip(), textTranslation.rstrip()))
+                    if debugMessages:
+                        print("textMatch: %s -> %s\n" %
+                            (entry.msgid.rstrip(), textTranslation.rstrip()))
 
 
         try:
