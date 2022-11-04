@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Orca XML File Format -->
+<OrcaTrees OriginalFilePath="D:\Users\Administrator\Documents\GitHub\UchuujinPatcher\bin\crifilesystem\CpkFileBuilder.settings" ObjectTypeExpression="Full" BinaryEncodingType="Base64" FileVersion="3" FileRevision="0">
+  <OrcaTree OrcaName="CpkFileBuilder">
+    <Orca OrcaName="Settings" RelativeLocalPath="True" FormSize="470, 134, 960, 720" WindowsState="Normal" FormSettingsVersion="2" DefaultCompMode="NoChecked" ComfirmDeletion="True" ExcludedFileFilter="" EnableStrictName="True" DS="0" Language="Default" FilePaneHeight="423" GroupPaneHeight="282" ShowLogPane="True" ShowTreePane="True" ShowDetailPane="True" HeaderDefinition="ContentFilePath" EnableBuildFileSync="False" OrcaType="CpkFileBuilder.Objects.ObjectFormSettings">
+      <Orca OrcaName="ProjFileHist" OrcaType="CpkFileBuilder.Objects.ObjectFileHist" />
+    </Orca>
+  </OrcaTree>
+</OrcaTrees>
+<!-- Copyright (c) CRI Middleware Co.,LTD. -->
+<!-- end of document -->
