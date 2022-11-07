@@ -40,6 +40,9 @@ def replace_iso():
     print("Replacing lt.bin")
     os.system(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/lt.bin work/isofiles/lt_patched.bin")
+    print("Replacing pr.bin")
+    os.system(
+        "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/pr.bin work/isofiles/pr_patched.bin")
 
 
 if __name__ == "__main__":
