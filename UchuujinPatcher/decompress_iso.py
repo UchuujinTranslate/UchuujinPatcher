@@ -37,14 +37,19 @@ def decompress_iso():
     print("Extracting sc.cpk")
     iso.get_file_from_iso(
         "work/isofiles/sc.cpk", iso_path='/PSP_GAME/USRDIR/DATA/sc.cpk')
+    print("Extracting union.cpk")
+    iso.get_file_from_iso(
+        "work/isofiles/union.cpk", iso_path='/PSP_GAME/USRDIR/DATA/union.cpk')
     print("Extracting EBOOT.BIN")
     iso.get_file_from_iso(
         "work/isofiles/EBOOT.BIN", iso_path='/PSP_GAME/SYSDIR/EBOOT.BIN')
     print("Extracting lt.bin")
     iso.get_file_from_iso(
         "work/isofiles/lt.bin", iso_path='/PSP_GAME/USRDIR/DATA/lt.bin')
+    print("Extracting pr.bin")
     iso.get_file_from_iso(
-        "work/isofiles/union.cpk", iso_path='/PSP_GAME/USRDIR/DATA/union.cpk')
+        "work/isofiles/pr.bin", iso_path='/PSP_GAME/USRDIR/DATA/pr.bin')
+    
     iso.close()
 
 
