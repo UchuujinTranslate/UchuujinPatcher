@@ -1,12 +1,25 @@
 import binascii
-import os
-import sys, struct, json
+import struct, json
 import io
 from os.path import basename
 import polib
 
-def patch_translations(sc_file, meta, po, patched_dir, meta2):
-    print(f'Patching sc file: {sc_file}')
+def patch_translations(filename):
+    
+    sc_dir = "work/isofiles/sc/"
+    scripts = "work/repos/weblate/scripts/"
+    patched_dir = "work/isofiles/sc_patched/"
+    scripts_tmp = "work/repos/weblate/scripts/temp/"
+    
+    sc_file = sc_dir + filename
+    meta = scripts_tmp + filename + ".json"
+    po = scripts + "en_US/" + filename + ".po"
+    patched_dir = patched_dir
+    meta2 = scripts + filename + ".json"
+    
+    
+    
+    print(f'Patching sc file {sc_file}')
     sc = open(sc_file, 'rb')
     sc_name = basename(sc_file)
     meta = json.load(open(meta, 'r', encoding='utf-8'))
@@ -313,4 +326,10 @@ def patch_translations(sc_file, meta, po, patched_dir, meta2):
     patched.seek(-16, 2)
     patched.write(checksum)
     open(patched_dir+sc_name,"wb").write(patched.getbuffer())
+    
+    return
 
+
+if __name__ == '__main__':
+    print()
+    #placeholder

@@ -13,7 +13,11 @@ from shutil import copyfile, rmtree
 
 def cpk_dump():
     # Make dir
-    os.mkdir("work/isofiles/sc")
+    
+    try:
+        os.mkdir("work/isofiles/sc")
+    except FileExistsError:
+        print("Dir already exists")
 
 
     # Copy CPT and sc.cpk into same directory so ALL arg doesn't get put in root dir

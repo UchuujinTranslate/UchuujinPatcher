@@ -36,11 +36,11 @@ UchuujinPatcher.decompress_iso.decompress_iso()
 import UchuujinPatcher.cpk_dump
 UchuujinPatcher.cpk_dump.cpk_dump()
     
-import UchuujinPatcher.union_dump
-UchuujinPatcher.union_dump.union_dump()
+# import UchuujinPatcher.union_dump
+# UchuujinPatcher.union_dump.union_dump()
 
-import UchuujinPatcher.union.union_cgs_extract
-UchuujinPatcher.union.union_cgs_extract.cgs_extract()
+# import UchuujinPatcher.union.union_cgs_extract
+# UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
 # patching cpk files
 import UchuujinPatcher.patch_eboot
