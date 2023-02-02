@@ -71,7 +71,7 @@ def create_binary_patch():
     # copy other files to to_zip folder
     shutil.copyfile("bin/DeltaPatcherLite.exe",
                     "output/to_zip/DeltaPatcherLite.exe")
-    shutil.copyfile("UchuujinPatcher/DISTRIB_README.txt", "output/to_zip/README.txt")
+    shutil.copyfile("UchuujinPatcher/extra_files/DISTRIB_README.txt", "output/to_zip/README.txt")
     
 
     # create zip file
