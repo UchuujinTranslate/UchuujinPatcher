@@ -36,7 +36,7 @@ def create_binary_patch():
     originalIso = "2668 - Nichijou - Uchuujin (Japan) (v1.01).iso"
     patchedIso = "output/NichiPatched.iso"
     
-    os.mkdir("output/to_zip")
+    os.makedirs(os.path.dirname("output/to_zip/"), exist_ok=True)
     
     # Label with latest translation commit or date?
     # Date for now

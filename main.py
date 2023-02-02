@@ -42,6 +42,9 @@ UchuujinPatcher.cpk_dump.cpk_dump()
 # import UchuujinPatcher.union.union_cgs_extract
 # UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
+import UchuujinPatcher.pr_dump
+UchuujinPatcher.pr_dump.pr_dump()
+
 # patching cpk files
 import UchuujinPatcher.patch_eboot
 UchuujinPatcher.patch_eboot.patch_eboot()
@@ -63,6 +66,9 @@ UchuujinPatcher.union.union_cgs_insert.cgs_insert()
 
 import UchuujinPatcher.union_pack
 UchuujinPatcher.union_pack.cpk_pack_union()
+
+import UchuujinPatcher.pr_pack
+UchuujinPatcher.pr_pack.pr_pack()
 
 # inserting iso files
 import UchuujinPatcher.replace_iso
