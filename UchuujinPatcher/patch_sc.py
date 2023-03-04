@@ -43,11 +43,12 @@ def patch_sc():
         ptrOff = 0x147044
         eboot.seek(ptrOff, 0)
 
-        # print(f'writing for {filename}')
-        newScSize = os.path.getsize(
-            patched_dir+filename)  # get new sc size
-        eboot.write(struct.pack("<HH", newScOffset >> 11, newScSize >> 11))
-        newScOffset += newScSize
+        for filename in filenames:
+            # print(f'writing for {filename}')
+            newScSize = os.path.getsize(
+                patched_dir+filename)  # get new sc size
+            eboot.write(struct.pack("<HH", newScOffset >> 11, newScSize >> 11))
+            newScOffset += newScSize
 
     # multithreaded version, ran 3 secs total!
     if multiThreaded:
@@ -58,8 +59,7 @@ def patch_sc():
 
         # calculate new pointer sc.cpk
         print("Writing eboot pointers")
-        for filename in filenames:
-            writeEBootPointers()
+        writeEBootPointers()
 
     # old single threaded version, 18 secs
     else:
