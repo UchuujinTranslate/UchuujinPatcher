@@ -122,6 +122,7 @@ def patch_translations(filename):
     "é":0x01cf,#only in café ?
     "è":0x01cf,
     }
+    
     f = open("UchuujinPatcher/sc/uchuujin.tbl", "r", encoding="utf-8")
     gtbl = {}
     for line in f:
@@ -179,7 +180,6 @@ def patch_translations(filename):
                 offset+=inc
             newOffsets.append(offset)
         return newOffsets
-
 
     patched = io.BytesIO()
     newBuff = io.BytesIO()

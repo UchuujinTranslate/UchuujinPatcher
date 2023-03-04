@@ -3,7 +3,7 @@
 # have function for first time setup
 # ask intelligently if iso is correct and put into config
 import ruamel.yaml
-import sys
+#import sys
 from os import path
 
 # Default config as string (for keeping comments)
@@ -44,7 +44,7 @@ default_config_str = """\
 
 - multithreading:
     # Use multiple CPU cores to process through files several times faster.
-    enabled: true
+    sc_patch_enabled: true
     
 - debug_messages:
     # Whether to print large amounts of output.
@@ -67,16 +67,23 @@ yaml = ruamel.yaml.YAML()  # defaults to round-trip if no parameters given
 default_config = yaml.load(default_config_str)
 
 # print(code)
-#yaml.dump(code, sys.stdout)
+# yaml.dump(code, sys.stdout)
 
-if path.exists("config.yml"):
+def config():
+    if not path.exists("config.yml"):
+        with open("config.yml", 'w') as f:
+            yaml.dump(default_config, f)
+        print('Created config!')
+
     with open('config.yml') as f:
         config = yaml.load(f)
 
     print('Loaded config.')
     #print(config)
+    return config
 
-else:
-    with open("config.yml", 'w') as f:
-        yaml.dump(default_config, f)
-        print('Created config!')
+
+
+
+if __name__ == "__main__":
+    config()
