@@ -20,12 +20,12 @@ def del_last_ver():
         shutil.rmtree("work", onerror=on_rm_error)
     except FileNotFoundError:
         print("Dir already deleted.")
-        
+
     try:
         shutil.rmtree("output", onerror=on_rm_error)
     except FileNotFoundError:
         print("Dir already deleted.")
-        
+
     try:
         os.remove("NichiPatched.iso")
     except FileNotFoundError:

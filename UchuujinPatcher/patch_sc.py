@@ -19,9 +19,9 @@ def patch_sc():
     start_time = time.time()
 
     sc_dir = "work/isofiles/sc/"
-    scripts = "work/repos/weblate/scripts/"
+    # scripts = "work/repos/weblate/scripts/"
     patched_dir = "work/isofiles/sc_patched/"
-    scripts_tmp = "work/repos/weblate/scripts/temp/"
+    # scripts_tmp = "work/repos/weblate/scripts/temp/"
 
     try:
         os.makedirs(patched_dir)
