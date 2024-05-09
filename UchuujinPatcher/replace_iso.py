@@ -13,7 +13,7 @@ import os
 def replace_iso():
     # Create duplicate of original .iso for patching.
     print("Copying game iso")
-    isoName = "2668 - Nichijou - Uchuujin (Japan) (v1.01).iso"
+    isoName = "Nichijou - Uchuujin (Japan).iso"
     os.makedirs(os.path.dirname("output/"), exist_ok=True)
     copyfile(isoName, "output/NichiPatched.iso")
 

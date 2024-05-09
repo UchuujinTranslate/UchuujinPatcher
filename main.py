@@ -53,7 +53,7 @@ UchuujinPatcher.cpk_dump.cpk_dump()
 # import UchuujinPatcher.union.union_cgs_extract
 # UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
-UchuujinPatcher.pr_dump.pr_dump()
+#UchuujinPatcher.pr_dump.pr_dump()
 
 # patching cpk files
 UchuujinPatcher.patch_eboot.patch_eboot()
@@ -70,7 +70,7 @@ os.system("py UchuujinPatcher/patch_sc.py")
 UchuujinPatcher.cpk_pack.cpk_pack_sc()
 # UchuujinPatcher.union.union_cgs_insert.cgs_insert()
 # UchuujinPatcher.union_pack.cpk_pack_union()
-UchuujinPatcher.pr_pack.pr_pack()
+#UchuujinPatcher.pr_pack.pr_pack()
 
 # inserting iso files
 UchuujinPatcher.replace_iso.replace_iso()

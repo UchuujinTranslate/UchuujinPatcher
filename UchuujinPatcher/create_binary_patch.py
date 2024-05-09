@@ -33,7 +33,7 @@ def makeMD5(filename):
     return md5Hash
 
 def create_binary_patch():    
-    originalIso = "2668 - Nichijou - Uchuujin (Japan) (v1.01).iso"
+    originalIso = "Nichijou - Uchuujin (Japan).iso"
     patchedIso = "output/NichiPatched.iso"
     
     os.makedirs(os.path.dirname("output/to_zip/"), exist_ok=True)
@@ -46,7 +46,7 @@ def create_binary_patch():
 
     # Create xdelta patch
     print("Creating patch file...")
-    os.system(f"bin\\xdelta3.exe -e -s \"{originalIso}\" {patchedIso} {patchFile}")
+    os.system(f"bin\\xdelta3-3.0.11-x86_64.exe -e -s \"{originalIso}\" {patchedIso} {patchFile}")
     
     
     # create md5 file
@@ -69,8 +69,9 @@ def create_binary_patch():
         f.write("MD5 of patch file: \n" + patchFileMD5 + "\n")
 
     # copy other files to to_zip folder
-    shutil.copyfile("bin/DeltaPatcherLite.exe",
-                    "output/to_zip/DeltaPatcherLite.exe")
+    # Uses xdelta 3.0.11
+    shutil.copyfile("bin/DeltaPatcher.exe",
+                    "output/to_zip/DeltaPatcher.exe")
     shutil.copyfile("UchuujinPatcher/extra_files/DISTRIB_README.txt", "output/to_zip/README.txt")
     
 

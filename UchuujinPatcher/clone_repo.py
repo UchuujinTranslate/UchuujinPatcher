@@ -41,6 +41,8 @@ def clone_repos():
     CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "master")
 
 
+
+
     # Take scripts out of weblate
     print("Copying scripts dir from weblate branch...")
     shutil.copytree("work/repos/weblate/scripts", "work/weblate_scripts")
