@@ -27,19 +27,21 @@ def replace_iso():
     os.system(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/sc.cpk work/isofiles/new_sc.cpk")
     
-    # Replace union.cpk with patched version.
-    print("Replacing union.cpk")
-    os.system(
-        "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/union.cpk work/isofiles/new_union.cpk")
+    # # Replace union.cpk with patched version.
+    # print("Replacing union.cpk")
+    # os.system(
+    #     "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/union.cpk work/isofiles/new_union.cpk")
 
     # Replace EBOOT.BIN with patched version.
     print("Replacing EBOOT.BIN")
     os.system(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/SYSDIR/EBOOT.BIN work/isofiles/EBOOT_patched.BIN")
+    
     # Replace lt.bin with patched version.
     print("Replacing lt.bin")
     os.system(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/lt.bin work/isofiles/lt_patched.bin")
+    
     print("Replacing pr.bin")
     os.system(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/pr.bin work/isofiles/pr_patched.bin")

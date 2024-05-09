@@ -22,8 +22,8 @@ class CloneProgress(RemoteProgress):
 
 repo_dir = "work/repos/"
 
-def CloneRepo(git_url, branch):
-    branch_dir = repo_dir + branch
+def CloneRepo(git_url, branch, folder):
+    branch_dir = repo_dir + "/" + folder
     
     print(f"Cloning {branch} repo...")
     Repo.clone_from(git_url, branch_dir, 
@@ -37,8 +37,10 @@ def CloneRepo(git_url, branch):
 # ----------------- Make separate versions for both repos ---------------- #
 def clone_repos():
     # Clone repo
-    CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate")
-    CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "master")
+    CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "weblate", "weblate")
+    CloneRepo("https://github.com/UchuujinTranslate/uchuujin.git", "master", "master")
+    CloneRepo("https://github.com/UchuujinTranslate/cgs.git", "main", "cgs")
+
 
 
 

@@ -6,9 +6,9 @@ Deceboot originates from [this page on ROMhacking.net](https://www.romhacking.ne
 
 Armips originates from [buildbot.orphis.net](https://buildbot.orphis.net/armips/). Armips is released under the MIT license.
 
-xdelta3.exe originates from a page on ROMhacking.net (Need to find again)
+xdelta3.exe originates from [this page on GitHub](https://github.com/jmacd/xdelta-gpl). xdelta is licenced under the GPL license.
 
-DeltaPatcher originates from [this page on ROMhacking.net](https://www.romhacking.net/utilities/704/). DeltaPatcher is released under the GPLv2 license.
+DeltaPatcher originates from [this page on GitHub](https://github.com/marco-calautti/DeltaPatcher). DeltaPatcher is released under the GPLv2 license.
 
 Gimconv originates from [this page on www.psx-place.com](https://www.psx-place.com/threads/rcomage-mod-1-9-proper-automated-gim-to-png-conversion-dump-compile-files.22867/).
 

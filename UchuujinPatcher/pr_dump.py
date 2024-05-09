@@ -157,7 +157,7 @@ def decompress(buff):
 
 def pr_dump():
     os.makedirs(os.path.dirname("work/isofiles/pr/"), exist_ok=True)
-    shutil.copytree("work/repos/weblate/pr_cgs_translated", "work/isofiles/pr_cgs_translated")
+    shutil.copytree("work/repos/cgs/pr_cgs_translated", "work/isofiles/pr_cgs_translated")
     pr = open("work/isofiles/pr.bin","rb")
     for info in infos:
         id,offset,size,type,compress,chunk,ref = info

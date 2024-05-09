@@ -53,7 +53,7 @@ UchuujinPatcher.cpk_dump.cpk_dump()
 # import UchuujinPatcher.union.union_cgs_extract
 # UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
-#UchuujinPatcher.pr_dump.pr_dump()
+UchuujinPatcher.pr_dump.pr_dump()
 
 # patching cpk files
 UchuujinPatcher.patch_eboot.patch_eboot()
@@ -63,14 +63,14 @@ UchuujinPatcher.adjust_width_font.adjust_width_font()
 # multiprocessing scripts must launch on their own to function properly
 # launching as a function will cause main.py to run constantly
 os.system("py UchuujinPatcher/patch_sc.py")
-
+# old way
 # import UchuujinPatcher.patch_sc
 # UchuujinPatcher.patch_sc.patch_sc()
 
 UchuujinPatcher.cpk_pack.cpk_pack_sc()
 # UchuujinPatcher.union.union_cgs_insert.cgs_insert()
 # UchuujinPatcher.union_pack.cpk_pack_union()
-#UchuujinPatcher.pr_pack.pr_pack()
+UchuujinPatcher.pr_pack.pr_pack()
 
 # inserting iso files
 UchuujinPatcher.replace_iso.replace_iso()
