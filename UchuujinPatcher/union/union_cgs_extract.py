@@ -5,7 +5,7 @@ import json
 import gzip
 def cgs_extract():
     os.makedirs(os.path.dirname("work/isofiles/cgs/"), exist_ok=True)
-    shutil.copytree("work/repos/weblate/cgs_translated", "work/isofiles/cgs_translated")
+    shutil.copytree("work/repos/cgs/cgs_translated", "work/isofiles/cgs_translated")
     cwd = os.getcwd()
     meta = json.loads(open("UchuujinPatcher/union/cgs.json", "rb").read())
     print(cwd)

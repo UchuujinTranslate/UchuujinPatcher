@@ -47,11 +47,11 @@ UchuujinPatcher.clone_repo.clone_repos()
 UchuujinPatcher.decompress_iso.decompress_iso()
 UchuujinPatcher.cpk_dump.cpk_dump()
 
-# import UchuujinPatcher.union_dump
-# UchuujinPatcher.union_dump.union_dump()
+import UchuujinPatcher.union_dump
+UchuujinPatcher.union_dump.union_dump()
 
-# import UchuujinPatcher.union.union_cgs_extract
-# UchuujinPatcher.union.union_cgs_extract.cgs_extract()
+import UchuujinPatcher.union.union_cgs_extract
+UchuujinPatcher.union.union_cgs_extract.cgs_extract()
 
 UchuujinPatcher.pr_dump.pr_dump()
 
@@ -68,8 +68,8 @@ os.system("py UchuujinPatcher/patch_sc.py")
 # UchuujinPatcher.patch_sc.patch_sc()
 
 UchuujinPatcher.cpk_pack.cpk_pack_sc()
-# UchuujinPatcher.union.union_cgs_insert.cgs_insert()
-# UchuujinPatcher.union_pack.cpk_pack_union()
+UchuujinPatcher.union.union_cgs_insert.cgs_insert()
+UchuujinPatcher.union_pack.cpk_pack_union()
 UchuujinPatcher.pr_pack.pr_pack()
 
 # inserting iso files
