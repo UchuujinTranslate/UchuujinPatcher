@@ -9,9 +9,10 @@
 from shutil import copyfile, rmtree
 import os
 try:
-    from UchuujinPatcher import console
+    from UchuujinPatcher import console, movies
 except ImportError:
     import console
+    import movies
 
 
 def replace_iso():
@@ -49,6 +50,11 @@ def replace_iso():
     console.info("Replacing pr.bin")
     console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/pr.bin work/isofiles/pr_patched.bin")
+
+    # Edited movies from movies/translated/, see movies.py
+    for iso_path, movie in movies.built_movies():
+        console.info(f"Replacing {os.path.basename(iso_path)}")
+        console.run(f"bin\\UMD-replace.exe output/NichiPatched.iso {iso_path} {movie}")
 
 
 if __name__ == "__main__":

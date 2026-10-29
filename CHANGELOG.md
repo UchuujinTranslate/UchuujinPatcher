@@ -1,6 +1,20 @@
 # Changelog
 
-All changes below are unreleased and uncommitted (work done 2026-10-27 to 2026-10-29).
+## Movies (2026-10-29, not committed)
+
+The game has four movies, `op`, `yokoku`, `koutyou` and `ed`, stored as `.pmf` files on the iso.
+
+- `video_tools.py`: splits a PMF into H.264 video and ATRAC3+ audio and converts it to MP4 with ffmpeg (needs ffmpeg: `winget install Gyan.FFmpeg`). ffmpeg cannot read the audio from the PMF directly, so the ATRAC3+ frames are demuxed and wrapped in an OMA header first.
+- `pmf_mux.py`: builds a PMF again from H.264 access units and the ATRAC3+ frames. Re-muxing the original `op.pmf` gives identical video frames and timestamps (all 2696) and bit-identical audio when decoded.
+- `movies.py`:
+  - `py UchuujinPatcher/movies.py extract [name ...]` writes editable MP4s to `movies/original/` (git-ignored).
+  - An edited video placed at `movies/translated/<name>.mp4` is encoded (H.264 Main, level 2.1, 480x272, 29.97 fps, no B-frames, IDR every 59 frames), muxed with the original audio and put into the ISO by a new "Building translated movies" build step. Results are cached by the hash of the source file.
+- Only the picture is replaced; the original audio is kept. The new video is padded or cut to the original frame count.
+- Verified in PPSSPP: an ISO with `op.pmf` re-muxed from its own streams plays in full. Not verified: edited videos, other movies, or real hardware. The four 16-bit counters in each GOP's private stream 2 packet are written as 0, since their meaning is unknown, and padding packs are placed slightly differently from the originals (4 packs fewer in `op`).
+
+## Everything before the movies
+
+All changes below were committed in `8e0266a` (work done 2026-10-27 to 2026-10-29).
 
 ## Build process
 

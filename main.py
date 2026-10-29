@@ -38,6 +38,7 @@ import UchuujinPatcher.clone_repo
 import UchuujinPatcher.cleanup
 import UchuujinPatcher.cache
 import UchuujinPatcher.font_patch
+import UchuujinPatcher.movies
 
 import UchuujinPatcher.union_dump
 import UchuujinPatcher.union.union_cgs_extract
@@ -90,6 +91,7 @@ steps = [
     ("Inserting CG images", P.union.union_cgs_insert.cgs_insert, False),
     ("Packing union.cpk", P.union_pack.cpk_pack_union, False),
     ("Packing pr.bin", P.pr_pack.pr_pack, False),
+    ("Building translated movies", P.movies.build_movies, False),
     ("Building patched ISO", P.replace_iso.replace_iso, False),
     ("Creating distributable patch", P.create_binary_patch.create_binary_patch, False),
 ]
