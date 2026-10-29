@@ -4,6 +4,10 @@
 # Windows only currently... Compile for Linux build.
 import os
 from shutil import copyfile, rmtree
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 # # Clean before proceeding
 # try:
@@ -23,7 +27,8 @@ def union_dump():
     # Must execute in same dir as well
     cwd = os.getcwd()
     os.chdir("work/isofiles/union")
-    os.system("CriPakTools.exe union.cpk ALL")
+    console.info("Dumping union.cpk contents")
+    console.run(".\\CriPakTools.exe union.cpk ALL", "CriPakTools")
 
     # Delete tools
     os.remove("CriPakTools.exe")

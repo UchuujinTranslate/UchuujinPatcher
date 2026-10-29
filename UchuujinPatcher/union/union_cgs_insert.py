@@ -5,6 +5,11 @@ import gzip
 import io
 import glob
 import sys
+import shutil
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 group1_ptr_offset =0x131558
 group1_sizes  ={2108:0x15,
 2109:0x17,
@@ -999,7 +1004,22 @@ def cgs_insert():
     cwd = os.getcwd()
     os.makedirs(os.path.dirname("work/isofiles/union_patched/"), exist_ok=True)
     eboot = open("work/isofiles/EBOOT_patched.BIN", "r+b")
-    for js in glob.glob("work/isofiles/cgs_translated/*.json"):
+    js_files = glob.glob("work/isofiles/cgs_translated/*.json")
+    # convert every translated PNG to GIM in parallel up front
+    os.makedirs("work/isofiles/gim_tmp", exist_ok=True)
+    jobs = []
+    for js in js_files:
+        info = json.loads(open(js, "rb").read())
+        union_index = int(os.path.basename(js[:-5]))
+        for pixel_index, (pal, pix) in enumerate(zip(info["content"]["pallete"], info["content"]["pixel"]), 1):
+            jobs.append((
+                "bin\\GimConv\\GimConv.exe work/isofiles/cgs_translated/{0}_{1:02d}.png -o {2}/work/isofiles/gim_tmp/{0}_{1:02d}.gim {3}".format(
+                    union_index, pixel_index, cwd, pix["format"]),
+                "GimConv {0}_{1:02d}.png".format(union_index, pixel_index)))
+    console.run_all(jobs, "translated images")
+    console.info(f"Inserting {len(js_files)} translated CG files")
+    for n, js in enumerate(js_files, 1):
+        console.progress(n, len(js_files), "CG files")
         info = json.loads(open(js, "rb").read())
         union_index = int(os.path.basename(js[:-5]))
         pixel_index = 1
@@ -1008,19 +1028,18 @@ def cgs_insert():
         update_pallete = []
         update_pixel = []
         for pal, pix in zip(info["content"]["pallete"], info["content"]["pixel"]):
+            gim_path = "work/isofiles/gim_tmp/{0}_{1:02d}.gim".format(union_index, pixel_index)
             try:
-                os.system(
-                    "bin\\GimConv\\GimConv.exe work/isofiles/cgs_translated/{0}_{1:02d}.png -o {2}/work/isofiles/temp.gim {3}".format(
-                        union_index, pixel_index, cwd, pix["format"]))
-                gim = open("work/isofiles/temp.gim".format(union_index, pixel_index), 'rb')
-            except:
+                gim = open(gim_path, 'rb')
+            except OSError:
+                console.error("GimConv produced no output for {0}_{1:02d}.png".format(union_index, pixel_index))
                 sys.exit()
             gim.seek(0x44)
             gim_format = struct.unpack("H", gim.read(2))[0]
             gim.seek(0x34)
             pixel_size = struct.unpack("I", gim.read(4))[0] - 0x50
             if (gim_format != 4) and (gim_format != 5):
-                print("Invalid gim format, make sure the png format are indexed color.")
+                console.error("Invalid gim format, make sure the png format are indexed color.")
                 sys.exit()
             gim.seek(0x80)
             pixel = make_pixel(pix["chunk"], pix["chunk_offset"][0], pix["gzip_dsizes"],
@@ -1030,7 +1049,7 @@ def cgs_insert():
             gim.seek(0x48, 1)
             pallete = gim.read(palet_size)
             gim.close()
-            os.remove("work/isofiles/temp.gim")
+            os.remove(gim_path)
             pixel_index+=1
             if info["ptr_offset"] == None:
                 out.seek(pal["offset"])
@@ -1082,6 +1101,8 @@ def cgs_insert():
     for j in group3_sizes:
         eboot.write(struct.pack("HH", group3_offset, group3_sizes[j]))
         group3_offset += group3_sizes[j]
+    eboot.close()
+    shutil.rmtree("work/isofiles/gim_tmp", ignore_errors=True)
 
 
 

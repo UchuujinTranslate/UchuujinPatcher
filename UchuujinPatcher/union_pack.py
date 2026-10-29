@@ -4,6 +4,10 @@
 # for %%f in (*) do ..\..\executables\CriPakTools.exe ..\..\temp_pack\sc.cpk %%f ..\..\cpkdumps\sc\%%f && ECHO Put %%f file into "sc.cpk".
 import os
 from shutil import copyfile, rmtree
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 
 def cpk_pack_union():
@@ -19,8 +23,8 @@ def cpk_pack_union():
         id+=1
     csv.flush()
     csv.close()
-    os.system("bin\\crifilesystem\\cpkmakec.exe work/isofiles/union.csv -mode=ID -mask work/isofiles/new_union.cpk")
-
+    console.info('Building new_union.cpk')
+    console.run("bin\\crifilesystem\\cpkmakec.exe work/isofiles/union.csv -mode=ID -mask work/isofiles/new_union.cpk")
     #sc_dir = "union_patched/"
     #scripts = "weblate_scripts/"
     #

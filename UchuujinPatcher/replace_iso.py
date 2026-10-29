@@ -8,42 +8,46 @@
 # https://clalancette.github.io/pycdlib/example-modifying-file-in-place.html
 from shutil import copyfile, rmtree
 import os
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 
 def replace_iso():
     # Create duplicate of original .iso for patching.
-    print("Copying game iso")
+    console.info("Copying original ISO to output/NichiPatched.iso")
     isoName = "Nichijou - Uchuujin (Japan).iso"
     os.makedirs(os.path.dirname("output/"), exist_ok=True)
     copyfile(isoName, "output/NichiPatched.iso")
 
     # Possible english translation icon replacement?
-    print("Replacing ICON0.PNG")
-    os.system(
+    console.info("Replacing ICON0.PNG")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/ICON0.PNG UchuujinPatcher/extra_files/NEW_ICON0.PNG")
 
     # Replace sc.cpk with patched version.
-    print("Replacing sc.cpk")
-    os.system(
+    console.info("Replacing sc.cpk")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/sc.cpk work/isofiles/new_sc.cpk")
     
     # # Replace union.cpk with patched version.
-    print("Replacing union.cpk")
-    os.system(
+    console.info("Replacing union.cpk")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/union.cpk work/isofiles/new_union.cpk")
 
     # Replace EBOOT.BIN with patched version.
-    print("Replacing EBOOT.BIN")
-    os.system(
+    console.info("Replacing EBOOT.BIN")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/SYSDIR/EBOOT.BIN work/isofiles/EBOOT_patched.BIN")
     
     # Replace lt.bin with patched version.
-    print("Replacing lt.bin")
-    os.system(
+    console.info("Replacing lt.bin")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/lt.bin work/isofiles/lt_patched.bin")
     
-    print("Replacing pr.bin")
-    os.system(
+    console.info("Replacing pr.bin")
+    console.run(
         "bin\\UMD-replace.exe output/NichiPatched.iso PSP_GAME/USRDIR/DATA/pr.bin work/isofiles/pr_patched.bin")
 
 

@@ -4,6 +4,10 @@ import os
 import json
 import gzip
 import io,glob
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 infos = [[0,0,65536,'pixel',False,None,0],
 [1,65536,40960,'pixel',False,None,0],
 [2,106496,4096,'pixel',True,1,16],
@@ -79,15 +83,17 @@ cgsInfo = [[0,29,512,128,4,],
 ]
 
 def cgs_dump():
+    # GIM files are written first, then converted to PNG in parallel
+    cwd = os.getcwd()
+    jobs = []
     for info in cgsInfo:
-        cwd = os.getcwd()
         id_pixel,id_palette,pix_width,pix_height,form = info
-        print(info)
         pixel = open("work/isofiles/pr/{0:04d}.pixel".format(id_pixel),"rb").read()
         pallete = open("work/isofiles/pr/{0:04d}.palette".format(id_palette),"rb").read()
         pix_height =  len(pixel) // pix_width
         os.makedirs("work/isofiles/pr_cgs/", exist_ok=True)
-        gim = open("work/isofiles/temp.gim", 'wb')
+        gim_path = "work/isofiles/temp{0}.gim".format(id_pixel)
+        gim = open(gim_path, 'wb')
         hdr = [0x2E47494D, 0x312E3030,
                0x00505350,
                0x00000000,
@@ -142,8 +148,11 @@ def cgs_dump():
         gim.write(pallete)
         gim.flush()
         gim.close()
-        os.system("bin\\GimConv\\GimConv.exe work/isofiles/temp.gim -o {0}/work/isofiles/pr_cgs/{1:02d}.png".format(cwd,id_pixel))
-        os.remove("work/isofiles/temp.gim")
+        jobs.append(("bin\\GimConv\\GimConv.exe {0} -o {1}/work/isofiles/pr_cgs/{2:02d}.png".format(
+            gim_path, cwd, id_pixel), "GimConv " + gim_path))
+    console.run_all(jobs, "palette images")
+    for id_pixel, *_ in cgsInfo:
+        os.remove("work/isofiles/temp{0}.gim".format(id_pixel))
 def decompress(buff):
     com = io.BytesIO(buff)
     chunk = struct.unpack("I",com.read(4))[0]
@@ -155,11 +164,17 @@ def decompress(buff):
         dec+= gzip.decompress(com.read(offsets[i+1]-offsets[i]-0x10))
     return dec,ref
 
+def copy_pr_translated():
+    # translations come from the repo, so this is redone on every run
+    shutil.rmtree("work/isofiles/pr_cgs_translated", ignore_errors=True)
+    shutil.copytree("work/repos/cgs/pr_cgs_translated", "work/isofiles/pr_cgs_translated")
+    console.info("Copied translated pr images")
+
 def pr_dump():
     os.makedirs(os.path.dirname("work/isofiles/pr/"), exist_ok=True)
-    shutil.copytree("work/repos/cgs/pr_cgs_translated", "work/isofiles/pr_cgs_translated")
+    console.info("Unpacking pr.bin entries")
     pr = open("work/isofiles/pr.bin","rb")
-    for info in infos:
+    for n, info in enumerate(infos, 1):
         id,offset,size,type,compress,chunk,ref = info
         pr.seek(offset,0)
         buff = pr.read(size)
@@ -171,9 +186,11 @@ def pr_dump():
            
             open("work/isofiles/pr/{0:04d}.{1}".format(id,type),"wb").write(buff)
         info.append(ref)
-        print(info)
+        console.progress(n, len(infos), "pr.bin entries")
         
+    console.info("Converting CG images to PNG")
     cgs_dump()
     
 if __name__ == "__main__":
     pr_dump()
+    copy_pr_translated()

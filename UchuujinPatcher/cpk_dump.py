@@ -4,6 +4,10 @@
 # Windows only currently... Compile for Linux build.
 import os
 from shutil import copyfile, rmtree
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 # # Clean before proceeding
 # try:
@@ -17,7 +21,7 @@ def cpk_dump():
     try:
         os.mkdir("work/isofiles/sc")
     except FileExistsError:
-        print("Dir already exists")
+        console.warn("work/isofiles/sc already exists")
 
 
     # Copy CPT and sc.cpk into same directory so ALL arg doesn't get put in root dir
@@ -27,7 +31,8 @@ def cpk_dump():
     # Must execute in same dir as well
     cwd = os.getcwd()
     os.chdir("work/isofiles/sc")
-    os.system("CriPakTools.exe sc.cpk ALL")
+    console.info("Dumping sc.cpk contents")
+    console.run(".\\CriPakTools.exe sc.cpk ALL", "CriPakTools")
 
     # Delete tools
     os.remove("CriPakTools.exe")

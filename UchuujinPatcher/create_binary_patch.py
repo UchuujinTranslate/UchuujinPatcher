@@ -6,6 +6,10 @@ from datetime import date
 import hashlib
 import os
 import shutil
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 
 
@@ -45,21 +49,21 @@ def create_binary_patch():
     patchFile = f"output/to_zip/{patchTitle}.xdelta"
 
     # Create xdelta patch
-    print("Creating patch file...")
-    os.system(f"bin\\xdelta3-3.0.11-x86_64.exe -e -s \"{originalIso}\" {patchedIso} {patchFile}")
+    console.info("Creating xdelta patch (this can take a while)")
+    console.run(f"bin\\xdelta3-3.0.11-x86_64.exe -e -s \"{originalIso}\" {patchedIso} {patchFile}")
     
     
     # create md5 file
-    print("Generating MD5 Hashes...")
+    console.info("Generating MD5 hashes")
     
     originalMD5 = makeMD5(originalIso)
-    print("Original ISO MD5: " + originalMD5)
+    console.info("Original ISO MD5: " + originalMD5)
     
     patchedMD5 = makeMD5(patchedIso)
-    print("Patched ISO MD5: " + patchedMD5)
+    console.info("Patched ISO MD5:  " + patchedMD5)
     
     patchFileMD5 = makeMD5(patchFile)
-    print("Patch File MD5: " + patchFileMD5)
+    console.info("Patch file MD5:   " + patchFileMD5)
 
     # Create text file
     # Make into yml or similar file for player-end patch tool to use?
@@ -76,8 +80,9 @@ def create_binary_patch():
     
 
     # create zip file
-    print("Making .zip archive...")
+    console.info("Making .zip archive")
     shutil.make_archive(f"output/{patchTitle}", 'zip', "output/to_zip")
+    console.ok(f"Created output/{patchTitle}.zip")
 
 
 if __name__ == "__main__":

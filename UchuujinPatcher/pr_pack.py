@@ -2,7 +2,12 @@ import shutil
 import struct
 import os
 import gzip
+import sys
 import io,glob
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 infos = [[0,0,65536,'pixel',False,None,0],
 [1,65536,40960,'pixel',False,None,0],
 [2,106496,4096,'pixel',True,1,16],
@@ -135,19 +140,25 @@ def compress_file(chunk,ref,dsize,binary):
     return ret.read()
 def cgs_pack():
     cwd = os.getcwd()
+    # convert all translated PNGs to GIM in parallel first
+    jobs = []
+    for id_pixel,id_palette,pix_width,pix_height,form in cgsInfo:
+        if os.path.exists("work/isofiles/pr_cgs_translated/{0:02d}.png".format(id_pixel)):
+            jobs.append(("bin\\GimConv\\GimConv.exe work/isofiles/pr_cgs_translated/{1:02d}.png -o {0}/work/isofiles/temp{3}.gim -pspindex{2}".format(cwd, id_pixel,form,id_pixel),
+                         "GimConv {0:02d}.png".format(id_pixel)))
+    console.run_all(jobs, "translated images")
     for info in cgsInfo:
         id_pixel,id_palette,pix_width,pix_height,form = info
-       
+
         if os.path.exists("work/isofiles/pr_cgs_translated/{0:02d}.png".format(id_pixel)):
-            
-            os.system("bin\\GimConv\\GimConv.exe work/isofiles/pr_cgs_translated/{1:02d}.png -o {0}/work/isofiles/temp{3}.gim -pspindex{2}".format(cwd, id_pixel,form,id_pixel))
+
             gim = open("work/isofiles/temp{0}.gim".format(id_pixel), 'rb')
             gim.seek(0x44)
             gim_format = struct.unpack("H", gim.read(2))[0]
             gim.seek(0x34)
             pixel_size = struct.unpack("I", gim.read(4))[0] - 0x50
             if (gim_format != 4) and (gim_format != 5):
-                print("Invalid gim format, make sure the png format are indexed color.")
+                console.error("Invalid gim format, make sure the png format are indexed color.")
                 sys.exit()
             gim.seek(0x80)
             pixel = gim.read(pixel_size)
@@ -163,7 +174,9 @@ def cgs_pack():
         
 def pr_pack():
     os.makedirs(os.path.dirname("work/isofiles/pr_patched/"), exist_ok=True)
+    console.info("Converting translated CG images")
     cgs_pack()
+    console.info("Rebuilding pr.bin")
     shutil.copy("work/isofiles/pr.bin","work/isofiles/pr_patched.bin")
     pr = open("work/isofiles/pr_patched.bin","r+b")
     for info in infos:
@@ -177,7 +190,7 @@ def pr_pack():
                 buff = open("work/isofiles/pr_patched/{0:04d}.{1}".format(id,type),"rb").read()
             if len(buff)>size:
                 open("work/isofiles/pr_fail_{0:04d}.{1}".format(id,type),"wb").write(buff)
-                print("Modified file is larger than original,skip insert!!",id,hex(size),hex(len(buff)))
+                console.warn(f"pr.bin entry {id}: modified file is larger than original, skipping insert (original {hex(size)}, new {hex(len(buff))})")
             else:
                 pr.write(buff)
     checksum = calc_checksum(pr)

@@ -4,28 +4,28 @@ import json
 import io
 from os.path import basename
 import polib
+from functools import lru_cache
+
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
+try:
+    from sc import text_layout
+except ImportError:
+    from UchuujinPatcher.sc import text_layout
+try:
+    import english_glyphs
+except ImportError:
+    from UchuujinPatcher import english_glyphs
 
 
-def patch_translations(filename):
+@lru_cache(maxsize=None)
+def build_table(english=False):
+    """Character -> glyph code table (shared, read-only).
 
-    sc_dir = "work/isofiles/sc/"
-    scripts = "work/repos/weblate/scripts/"
-    patched_dir = "work/isofiles/sc_patched/"
-    scripts_tmp = "work/repos/weblate/scripts/temp/"
-
-    sc_file = sc_dir + filename
-    meta = scripts_tmp + filename + ".json"
-    po = scripts + "en_US/" + filename + ".po"
-    patched_dir = patched_dir
-    meta2 = scripts + filename + ".json"
-
-    print(f'Patching sc file: {sc_file}')
-    # sc = open(sc_file, 'rb')
-    sc_name = basename(sc_file)
-    meta = json.load(open(meta, 'r', encoding='utf-8'))
-    po = polib.pofile(po)
-    # patched_dir = (patched_dir)
-    meta2 = json.load(open(meta2, 'r', encoding='utf-8'))
+    english=True uses the redrawn English punctuation glyphs. Untranslated
+    Japanese text keeps the original glyphs, so it must not use them."""
     table = {
         "⠀": 0x0000,
         " ": 0x0000,
@@ -132,8 +132,33 @@ def patch_translations(filename):
             key = str(key.replace("\\n", "\n"))
             gtbl[key] = val
     table.update(gtbl)
+    if english:
+        table.update(english_glyphs.char_codes())
+        english_glyphs.apply_fullwidth(table)
+    return table
 
-    def encode(asc):
+
+def patch_translations(filename):
+
+    sc_dir = "work/isofiles/sc/"
+    scripts = "work/repos/weblate/scripts/"
+    patched_dir = "work/isofiles/sc_patched/"
+    scripts_tmp = "work/repos/weblate/scripts/temp/"
+
+    sc_file = sc_dir + filename
+    meta = scripts_tmp + filename + ".json"
+    po = scripts + "en_US/" + filename + ".po"
+    patched_dir = patched_dir
+    meta2 = scripts + filename + ".json"
+
+    # sc = open(sc_file, 'rb')
+    sc_name = basename(sc_file)
+    meta = json.load(open(meta, 'r', encoding='utf-8'))
+    po = polib.pofile(po)
+    # patched_dir = (patched_dir)
+    meta2 = json.load(open(meta2, 'r', encoding='utf-8'))
+    def encode(asc, english=False):
+        table = build_table(english)
         ret = b""
         length = len(asc)
         asc += "[{FFFF}]"
@@ -150,23 +175,13 @@ def patch_translations(filename):
                 ret += struct.pack("<H", 0xfffe)
                 i += 2
             elif asc[i] == "." and asc[i+1] == "." and asc[i+2] == ".":
-                ret += struct.pack("<H", 0x23)  # 3 periods to elipsis
+                ret += struct.pack("<H", table["…"])  # 3 periods to ellipsis
                 i += 3
-            elif asc[i] == "!" and asc[i+1] == "!":
-                ret += struct.pack("<H", 0x017f)
-                i += 2
-            elif asc[i] == "!" and asc[i+1] == "?":
-                ret += struct.pack("<H", 0x0180)
-                i += 2
-            elif asc[i] == "…":
-                ret += struct.pack("<H", 0x23)
-                i += 1
             elif c in table:
                 ret += struct.pack("<H", table[c])
                 i += 1
             else:
-                print("Uncaught character: "+c)
-                print("Skipping over character")
+                console.warn(f"{filename}: uncaught character {c!r}, skipping it")
                 input("Press any key to continue...")
                 i += 1
 
@@ -182,10 +197,6 @@ def patch_translations(filename):
 
     patched = io.BytesIO()
     newBuff = io.BytesIO()
-    patched.write(binascii.unhexlify(meta["UNK"].encode("ASCII")))
-    patched.seek(0x80)
-    patched.write(struct.pack(
-        "<IIII", meta["id"], meta["total"], meta["ptrs"], meta["extra"]))
     newBuff.write(bytes(meta["ptr2"]["size"]))
     newBuff.write(binascii.unhexlify(
         meta["ptr2"]["ctrl_code"].encode("ASCII")))
@@ -228,40 +239,103 @@ def patch_translations(filename):
             # Insert speaker
             if len(speakerTranslation) > 0:
                 meta["contents"][index]["speaker"] = speakerTranslation
+                meta["contents"][index]["speaker_translated"] = True
 
             # Insert text
             if len(textTranslation) > 0:
                 meta["contents"][index]["text"] = textTranslation+'\n'
+                meta["contents"][index]["translated"] = True
         except:
-            print("Wrong ID:", sc_name)
-            print(dialog)
+            console.warn(f"{sc_name}: wrong dialog ID {index}: {dialog}")
+
+    # fit every message into the text box (see text_layout.py)
+    widths = text_layout.load_widths()
+    overflow = []  # messages that still need more lines than the box has
+    prepared = []  # (encoded speaker, [encoded text of each box])
+    for i in range(meta["total"]):
+        content = meta["contents"][i]
+        bSpeaker, _ = encode(
+            content["speaker"], content.get("speaker_translated", False))
+        bText, _ = encode(content["text"], content.get("translated", False))
+        boxes = [bText]
+        if content.get("translated"):
+            split = text_layout.split_enabled(
+                sc_name, content["id"], content["ctrl_code"])
+            boxes, lineCount = text_layout.fit_bytes(bText, widths, split)
+            if len(boxes) > 1:
+                overflow.append({"kind": "split",
+                                 "file": sc_name,
+                                 "id": content["id"],
+                                 "speaker": content["speaker"].rstrip("\n"),
+                                 "text": content["text"].rstrip("\n")})
+            if lineCount > text_layout.MAX_LINES:
+                overflow.append({"kind": "overflow",
+                                 "file": sc_name,
+                                 "id": content["id"],
+                                 "lines": lineCount,
+                                 "excess": text_layout.excess_glyphs(boxes[0]),
+                                 "text": content["text"].rstrip("\n")})
+        prepared.append((bSpeaker, boxes))
+
+    # Boxes added by splitting need pointer table entries, so the header's
+    # message count and the start of the extra section move.
+    added = sum(len(boxes) - 1 for _, boxes in prepared)
+    total = meta["total"] + added
+    ptrs = meta["ptrs"]
+    if added:
+        ptrs = (4 * total + 16 + 15) // 16 * 16
+        if ptrs + 32 * meta["extra"] > 0x800 - 0x80:
+            console.warn(f"{sc_name}: no room for {added} split boxes, "
+                         "not splitting")
+            added, total, ptrs = 0, meta["total"], meta["ptrs"]
+            prepared = [(s, boxes[-1:]) for s, boxes in prepared]
+        else:
+            console.info(f"{sc_name}: split {added} message(s) into extra boxes")
+
+    patched.write(binascii.unhexlify(meta["UNK"].encode("ASCII")))
+    patched.seek(0x80)
+    patched.write(struct.pack("<IIII", meta["id"], total, ptrs, meta["extra"]))
 
     # main section
+    pointers = {}  # message id -> offset of its entry
+    next_id = meta["total"]
+    split_tail = binascii.unhexlify(text_layout.SPLIT_TAIL.encode("ASCII"))
     for i in range(meta["total"]):
-        patched.write(struct.pack("<I", newOffset))
-        newBuff.write(struct.pack(
-            "<HH", meta["contents"][i]["magic"], meta["contents"][i]["id"]))
-        newSpeaker = meta["contents"][i]["speaker"]
-        newText = meta["contents"][i]["text"]
+        content = meta["contents"][i]
+        bSpeaker, boxes = prepared[i]
 
-        bSpeaker, newLenSpeaker = encode(newSpeaker)
-        inc = newLenSpeaker - meta["contents"][i]["speaker_len"]
+        # boxes added in front of the original entry
+        for bText in boxes[:-1]:
+            entry = (struct.pack("<HH", content["magic"], next_id) + bSpeaker
+                     + b"\xff\xff" + bText + split_tail)
+            meta["ptr2"]["offsets"] = updateOffsets(
+                meta["ptr2"]["offsets"], newBuff.tell(), len(entry))
+            pointers[next_id] = newBuff.tell()
+            newBuff.write(entry)
+            next_id += 1
+
+        # the original entry, with the last box
+        bText = boxes[-1]
+        pointers[content["id"]] = newBuff.tell()
+        newBuff.write(struct.pack("<HH", content["magic"], content["id"]))
+
+        inc = len(bSpeaker) - content["speaker_len"]
         meta["ptr2"]["offsets"] = updateOffsets(
             meta["ptr2"]["offsets"], newBuff.tell(), inc)
         newBuff.write(bSpeaker)
 
         newBuff.write(b"\xff\xff")
 
-        bText, newLenText = encode(newText)
-        inc = newLenText - meta["contents"][i]["text_len"]
+        inc = len(bText) - content["text_len"]
         meta["ptr2"]["offsets"] = updateOffsets(
             meta["ptr2"]["offsets"], newBuff.tell(), inc)
         newBuff.write(bText)
 
-        newBuff.write(binascii.unhexlify(
-            meta["contents"][i]["ctrl_code"].encode("ASCII")))
-        newOffset = newBuff.tell()
-    patched.seek(meta["ptrs"] + 0x80)
+        newBuff.write(binascii.unhexlify(content["ctrl_code"].encode("ASCII")))
+
+    for message_id in range(total):
+        patched.write(struct.pack("<I", pointers[message_id]))
+    patched.seek(ptrs + 0x80)
 
     # extra section
     if meta["extra"] > 0:
@@ -317,13 +391,12 @@ def patch_translations(filename):
             p4 += 0 + a4
         p4 = p4 & m
         s -= 16
-    print("%x %x %x %x" % (p1, p2, p3, p4))
     checksum = struct.pack("<IIII", p1, p2, p3, p4)
     patched.seek(-16, 2)
     patched.write(checksum)
     open(patched_dir+sc_name, "wb").write(patched.getbuffer())
 
-    return
+    return overflow
 
 
 if __name__ == '__main__':

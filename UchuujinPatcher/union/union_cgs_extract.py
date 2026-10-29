@@ -3,12 +3,27 @@ import os
 import struct
 import json
 import gzip
+from concurrent.futures import ThreadPoolExecutor
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
+def copy_cgs_translated():
+    # translations come from the repo, so this is redone on every run
+    shutil.rmtree("work/isofiles/cgs_translated", ignore_errors=True)
+    shutil.copytree("work/repos/cgs/cgs_translated", "work/isofiles/cgs_translated")
+    console.info("Copied translated CG images")
+
+
 def cgs_extract():
     os.makedirs(os.path.dirname("work/isofiles/cgs/"), exist_ok=True)
-    shutil.copytree("work/repos/cgs/cgs_translated", "work/isofiles/cgs_translated")
     cwd = os.getcwd()
     meta = json.loads(open("UchuujinPatcher/union/cgs.json", "rb").read())
-    print(cwd)
+    console.info(f"Extracting {len(meta)} CG files from union.cpk")
+    # GIM files are written one by one (cheap), then converted to PNG in
+    # parallel since each GimConv call is a separate process
+    os.makedirs("work/isofiles/gim_tmp", exist_ok=True)
+    jobs = []
     for union_index in meta:
         f = open("work/isofiles/union/{}".format(union_index), "rb")
         info = meta[str(union_index)]
@@ -21,7 +36,8 @@ def cgs_extract():
             for off, size in zip(pix["chunk_offset"], pix["gzip_csizes"]):
                 f.seek(off + pix["offset"] + 16)
                 pixel += gzip.decompress(f.read(size))
-            gim = open("work/isofiles/temp.gim".format(union_index, pixel_index), 'wb')
+            gim_path = "work/isofiles/gim_tmp/{0}_{1:02d}.gim".format(union_index, pixel_index)
+            gim = open(gim_path, 'wb')
             hdr = [0x2E47494D, 0x312E3030,
                    0x00505350,
                    0x00000000,
@@ -76,14 +92,27 @@ def cgs_extract():
             gim.write(pallete)
             gim.flush()
             gim.close()
-            os.system(
-                "bin\\GimConv\\GimConv.exe work/isofiles/temp.gim -o {2}/work/isofiles/cgs/{0}_{1:02d}.png".format(
-                    union_index, pixel_index, cwd))
-            os.remove("work/isofiles/temp.gim")
+            jobs.append((gim_path, "{0}/work/isofiles/cgs/{1}_{2:02d}.png".format(
+                cwd, union_index, pixel_index)))
             pixel_index += 1
         if info["content"]["map"]:
             map = open("work/isofiles/cgs/{0}.map".format(union_index), "wb")
             f.seek(info["content"]["map"]["offset"])
             map.write(f.read(info["content"]["map"]["size"]))
+
+    def convert(job):
+        gim_path, png_path = job
+        console.run(
+            "bin\\GimConv\\GimConv.exe {0} -o {1}".format(gim_path, png_path),
+            "GimConv " + os.path.basename(gim_path))
+        os.remove(gim_path)
+
+    workers = min(32, (os.cpu_count() or 4) * 2)
+    console.info(f"Converting {len(jobs)} images to PNG using {workers} workers")
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for done, _ in enumerate(pool.map(convert, jobs), 1):
+            console.progress(done, len(jobs), "images")
+    os.rmdir("work/isofiles/gim_tmp")
 if __name__ == "__main__":
     cgs_extract()
+    copy_cgs_translated()

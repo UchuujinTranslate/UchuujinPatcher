@@ -4,10 +4,15 @@
 # for %%f in (*) do ..\..\executables\CriPakTools.exe ..\..\temp_pack\sc.cpk %%f ..\..\cpkdumps\sc\%%f && ECHO Put %%f file into "sc.cpk".
 import os
 from shutil import copyfile, rmtree
+try:
+    from UchuujinPatcher import console
+except ImportError:
+    import console
 
 
 def cpk_pack_sc():
-    os.system("bin\\crifilesystem\\cpkmakec.exe work/isofiles/sc_patched -mode=ID -mask work/isofiles/new_sc.cpk")
+    console.info('Building new_sc.cpk')
+    console.run("bin\\crifilesystem\\cpkmakec.exe work/isofiles/sc_patched -mode=ID -mask work/isofiles/new_sc.cpk")
     #sc_dir = "sc_patched/"
     #scripts = "weblate_scripts/"
     #
